@@ -1,7 +1,7 @@
-##FIAP Hackathon Server
+## FIAP Hackathon Server
 Este é o back-end do projeto desenvolvido para o hackathon da FIAP, como parte da pós-graduação em Desenvolvimento Full Stack. O objetivo do projeto é fornecer uma API robusta e escalável, com foco em segurança, performance e boas práticas de desenvolvimento.
 
-###🚀 Tecnologias Utilizadas
+### 🚀 Tecnologias Utilizadas
 - Node.js.
 - Express.js.
 - MongoDB.
@@ -11,22 +11,29 @@ Este é o back-end do projeto desenvolvido para o hackathon da FIAP, como parte 
 - Bcrypt.
 - Dotenv.
 
-###📂 Estrutura do Projeto
+### 📂 Estrutura do Projeto
 
-_
 ├── src
-│   ├── Controllers       # Controladores das rotas
-│   ├── Middlewares       # Middlewares para autenticação e validação
-│   ├── Models            # Lógica de interação com o banco de dados
-│   ├── Routers           # Rotas da API
-│   ├── Schemas           # Schemas do MongoDB com Mongoose
-│   └── Utils             # Funções utilitárias reutilizáveis
-├── .env                  # Variáveis de ambiente
-├── package.json          # Dependências e scripts do projeto
-└── README.md             # Documentação do projeto
-_
 
-##⚙️ Instalação e Uso
+│   ├── Controllers       # Controladores das rotas
+
+│   ├── Middlewares       # Middlewares para autenticação e validação
+
+│   ├── Models            # Lógica de interação com o banco de dados
+
+│   ├── Routers           # Rotas da API
+
+│   ├── Schemas           # Schemas do MongoDB com Mongoose
+
+│   └── Utils             # Funções utilitárias reutilizáveis
+
+├── .env                  # Variáveis de ambiente
+
+├── package.json          # Dependências e scripts do projeto
+
+└── README.md             # Documentação do projeto
+
+## ⚙️ Instalação e Uso
 
 **Pré-requisitos**
 - Node.js instalado.
