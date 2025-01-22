@@ -35,6 +35,14 @@ const questionSchema = new mongoose.Schema({
 });
 
 const testSchema = new mongoose.Schema({
+	testCode: {
+			type: String,
+			required: true,
+	},
+	testName: {
+			type: String,
+			required: true,
+	},
   professor: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -44,11 +52,21 @@ const testSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  year: {
-    type: Number,
+	testType: {
+		type: String,
     required: true,
-  },
-  class: { // "turma"
+    enum: ['Online', 'Presencial']	
+	},
+	maxScore: {
+		type: String, // Pensar em mudar para 'number'
+    required: true,
+	},
+	status: {
+		type: String,
+    required: true,
+    enum: ['statusProvaAtiva', 'statusProvaInativa', 'statusProvaEmElaboracao']	
+	},
+  grade: { // "turma"
     type: String,
     required: true,
   },
