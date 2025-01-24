@@ -1,15 +1,28 @@
 import UsersModels from '../Models/UsersModels.js';
 import {
-  checkMissingRequiredFields,
   validateEssentialFields,
   essentialFieldsAlreadyExists,
   generateToken,
   passwordDecryption,
 } from '../Utils/UsersUtils.js';
+import { checkMissingRequiredFields } from '../Utils/Utils.js';
 
 const UserRegister = async (req, res) => {
   // * Dados necessários foram enviados?
-  const missingFields = checkMissingRequiredFields(req.body);
+
+  const requiredFields = [
+    [
+      'name',
+      'lastName',
+      'birthDate',
+      'CPF',
+      'phone',
+      'email',
+      'password',
+      'gender',
+    ],
+  ];
+  const missingFields = checkMissingRequiredFields(req.body, requiredFields);
   if (!missingFields.success) {
     return res.status(400).json(missingFields);
   }
@@ -61,7 +74,10 @@ const UserLogin = async (req, res) => {
 
     // Comparar senhas
     const password = req.body.password;
-    const passwordMatch = passwordDecryption(password, user.password);
+    const passwordMatch = passwordDecryption(
+      password,
+      user.personalInfo.password,
+    );
 
     if (!passwordMatch) {
       return res.status(400).json({
@@ -71,18 +87,23 @@ const UserLogin = async (req, res) => {
     }
 
     const token = generateToken(user);
-    const userLoginData = await UsersModels.getUserDataToLogin(user.email);
+    const userLoginData = await UsersModels.getUserDataToLogin(
+      user.personalInfo.email,
+    );
 
     //* Atualizar ultimo Ip de login e last login date
     UsersModels.updateUserField(
       user._id,
+      'connectionInfo',
       'lastLoginIP',
       req.userIp || 'N/A',
       req.userIp || 'N/A',
       false,
     );
+
     UsersModels.updateUserField(
       user._id,
+      'connectionInfo',
       'lastLoginDate',
       Date.now(),
       req.userIp || 'N/A',
@@ -101,7 +122,7 @@ const UserLogin = async (req, res) => {
 };
 
 const UserAuth = async (req, res) => {
-  const email = req.user.email;
+  const email = req.user.personalInfo.email;
 
   try {
     const user = await UsersModels.getUserDataToLogin(email);
@@ -110,6 +131,7 @@ const UserAuth = async (req, res) => {
     //* Atualizar ultimo Ip de login e last login date
     UsersModels.updateUserField(
       user._id,
+      'connectionInfo',
       'lastLoginIP',
       req.userIp || 'N/A',
       req.userIp || 'N/A',
@@ -117,6 +139,7 @@ const UserAuth = async (req, res) => {
     );
     UsersModels.updateUserField(
       user._id,
+      'connectionInfo',
       'lastLoginDate',
       Date.now(),
       req.userIp || 'N/A',

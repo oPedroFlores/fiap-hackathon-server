@@ -28,7 +28,7 @@ export const emailValidator = (email) => {
 };
 
 export const emailAlreadyExists = async (email) => {
-  const user = await userSchema.findOne({ email: email });
+  const user = await userSchema.findOne({ 'personalInfo.email': email });
   if (user) {
     return returnMessage(
       'email',
@@ -52,7 +52,7 @@ export const phoneValidator = (phone) => {
 };
 
 export const CPFAlreadyExists = async (CPF) => {
-  const user = await userSchema.findOne({ CPF: CPF });
+  const user = await userSchema.findOne({ 'personalInfo.CPF': CPF });
   if (user) {
     return returnMessage(
       'CPF',
@@ -64,7 +64,7 @@ export const CPFAlreadyExists = async (CPF) => {
 };
 
 export const phoneAlreadyExists = async (phone) => {
-  const user = await userSchema.findOne({ phone: phone });
+  const user = await userSchema.findOne({ 'personalInfo.phone': phone });
   if (user) {
     return returnMessage(
       'phone',
@@ -137,37 +137,6 @@ export const essentialFieldsAlreadyExists = async (data) => {
   }
 
   return { success: true, message: 'Todos os campos são válidos.' };
-};
-
-export const checkMissingRequiredFields = (data) => {
-  const clientRequiredFields = [
-    'name',
-    'lastName',
-    'birthDate',
-    'CPF',
-    'phone',
-    'email',
-    'password',
-    'gender',
-  ];
-
-  const missingFields = clientRequiredFields.filter((field) => {
-    return (
-      data[field] === undefined || data[field] === null || data[field] === ''
-    );
-  });
-
-  if (missingFields.length > 0) {
-    return {
-      success: false,
-      errors: `Os campos ${missingFields} são obrigatórios.`,
-    };
-  }
-
-  return {
-    success: true,
-    message: 'Todos os campos obrigatórios estão presentes.',
-  };
 };
 
 export const passwordEncryption = (password) => {
