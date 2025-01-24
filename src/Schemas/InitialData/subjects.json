@@ -1,0 +1,172 @@
+[
+  {
+    "name": "Matemática",
+    "topics": [
+      { "name": "Álgebra" },
+      { "name": "Geometria" },
+      { "name": "Trigonometria" },
+      { "name": "Estatística" },
+      { "name": "Cálculo" },
+      { "name": "Números Complexos" },
+      { "name": "Probabilidade" }
+    ]
+  },
+  {
+    "name": "Física",
+    "topics": [
+      { "name": "Mecânica" },
+      { "name": "Termodinâmica" },
+      { "name": "Eletromagnetismo" },
+      { "name": "Óptica" },
+      { "name": "Ondas" },
+      { "name": "Física Moderna" },
+      { "name": "Gravitação" }
+    ]
+  },
+  {
+    "name": "Química",
+    "topics": [
+      { "name": "Química Geral" },
+      { "name": "Química Orgânica" },
+      { "name": "Química Inorgânica" },
+      { "name": "Físico-Química" },
+      { "name": "Bioquímica" },
+      { "name": "Tabela Periódica" },
+      { "name": "Equilíbrio Químico" }
+    ]
+  },
+  {
+    "name": "Biologia",
+    "topics": [
+      { "name": "Citologia" },
+      { "name": "Genética" },
+      { "name": "Ecologia" },
+      { "name": "Fisiologia Humana" },
+      { "name": "Evolução" },
+      { "name": "Microbiologia" },
+      { "name": "Zoologia" },
+      { "name": "Botânica" },
+      { "name": "Imunologia" },
+      { "name": "História da Biologia" }
+    ]
+  },
+  {
+    "name": "História",
+    "topics": [
+      { "name": "História Antiga" },
+      { "name": "História Medieval" },
+      { "name": "História Moderna" },
+      { "name": "História Contemporânea" },
+      { "name": "História do Brasil" },
+      { "name": "História da América" },
+      { "name": "Movimentos Sociais no Brasil" }
+    ]
+  },
+  {
+    "name": "Geografia",
+    "topics": [
+      { "name": "Geografia Física" },
+      { "name": "Geografia Humana" },
+      { "name": "Cartografia" },
+      { "name": "Geopolítica" },
+      { "name": "Geografia Econômica" },
+      { "name": "Climatologia" },
+      { "name": "Biomas" },
+      { "name": "Recursos Naturais" },
+      { "name": "Demografia" }
+    ]
+  },
+  {
+    "name": "Português",
+    "topics": [
+      { "name": "Gramática" },
+      { "name": "Literatura" },
+      { "name": "Interpretação de Texto" },
+      { "name": "Redação" },
+      { "name": "Ortografia" },
+      { "name": "Figuras de Linguagem" },
+      { "name": "Análise Sintática" },
+      { "name": "Análise Morfológica" }
+    ]
+  },
+  {
+    "name": "Inglês",
+    "topics": [
+      { "name": "Gramática Inglesa" },
+      { "name": "Vocabulário" },
+      { "name": "Leitura e Compreensão" },
+      { "name": "Conversação" },
+      { "name": "Escrita" },
+      { "name": "Listening" },
+      { "name": "Pronúncia" }
+    ]
+  },
+  {
+    "name": "Educação Física",
+    "topics": [
+      { "name": "Esportes Coletivos" },
+      { "name": "Condicionamento Físico" },
+      { "name": "Educação e Saúde" },
+      { "name": "Ginástica" },
+      { "name": "Jogos e Recreação" },
+      { "name": "História do Esporte" },
+      { "name": "Alongamento e Postura" }
+    ]
+  },
+  {
+    "name": "Artes",
+    "topics": [
+      { "name": "História da Arte" },
+      { "name": "Artes Visuais" },
+      { "name": "Música" },
+      { "name": "Teatro" },
+      { "name": "Dança" },
+      { "name": "Pintura" },
+      { "name": "Escultura" }
+    ]
+  },
+  {
+    "name": "Filosofia",
+    "topics": [
+      { "name": "Ética" },
+      { "name": "Lógica" },
+      { "name": "Filosofia Antiga" },
+      { "name": "Filosofia Contemporânea" },
+      { "name": "Epistemologia" },
+      { "name": "Filosofia Política" },
+      { "name": "Existencialismo" }
+    ]
+  },
+  {
+    "name": "Sociologia",
+    "topics": [
+      { "name": "Teorias Sociológicas" },
+      { "name": "Cultura e Sociedade" },
+      { "name": "Estratificação Social" },
+      { "name": "Globalização" },
+      { "name": "Movimentos Sociais" },
+      { "name": "Indústria Cultural" },
+      { "name": "Diversidade e Inclusão" }
+    ]
+  },
+  {
+    "name": "Tecnologia",
+    "topics": [
+      { "name": "Programação Básica" },
+      { "name": "Internet e Sociedade" },
+      { "name": "Robótica" },
+      { "name": "Segurança Digital" },
+      { "name": "Inteligência Artificial" }
+    ]
+  },
+  {
+    "name": "Língua Espanhola",
+    "topics": [
+      { "name": "Gramática Espanhola" },
+      { "name": "Vocabulário" },
+      { "name": "Leitura e Compreensão" },
+      { "name": "Conversação" },
+      { "name": "Escrita" }
+    ]
+  }
+]
