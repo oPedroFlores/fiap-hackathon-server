@@ -8,6 +8,16 @@ const gradesSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
+  default: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    default: null,
+  },
 });
 
 // Registrar o modelo

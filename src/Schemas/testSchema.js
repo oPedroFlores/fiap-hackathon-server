@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import questionSchema from './questionSchema.js';
 
 const testSchema = new mongoose.Schema({
   testCode: {
@@ -23,6 +24,7 @@ const testSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: ['Online', 'Presencial'],
+    default: 'Presencial',
   },
   maxScore: {
     type: String, // Pensar em mudar para 'number'
@@ -31,7 +33,7 @@ const testSchema = new mongoose.Schema({
   status: {
     type: String,
     required: true,
-    enum: ['Ativa', 'Invativa', 'Em andamento', 'Finalizada'],
+    enum: ['Aguardando', 'Em andamento', 'Finalizada', 'Cancelada'],
   },
   grade: {
     // "turma"
@@ -63,8 +65,8 @@ const testSchema = new mongoose.Schema({
     default: Date.now,
   },
   accessibility: {
-    type: String,
-    enum: ['Yes', 'No'],
+    type: Boolean,
+    default: false,
     required: true,
   },
 });

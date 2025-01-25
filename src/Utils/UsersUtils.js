@@ -29,6 +29,7 @@ export const emailValidator = (email) => {
 
 export const emailAlreadyExists = async (email) => {
   const user = await userSchema.findOne({ 'personalInfo.email': email });
+  console.log(user);
   if (user) {
     return returnMessage(
       'email',
@@ -149,8 +150,9 @@ export const passwordDecryption = (password, hash) => {
   return bcrypt.compareSync(password, hash);
 };
 
-export const generateToken = (user) => {
-  const payload = { id: user._id, role: user.role };
+export const generateToken = (data) => {
+  console.log(`{ JWT } Generating token with data: ${JSON.stringify(data)}`);
+  const payload = { _id: data._id, role: data.role };
   const secret = process.env.JWT_SECRET;
   const token = jwt.sign(payload, secret, { expiresIn: '7d' });
   return token;

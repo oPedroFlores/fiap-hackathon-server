@@ -49,6 +49,7 @@ const register = async (user, userIp) => {
 };
 
 const getUserDataToLogin = async (email) => {
+  console.log(email);
   try {
     const user = await userSchema
       .findOne({ 'personalInfo.email': email })

@@ -9,18 +9,15 @@ import { checkMissingRequiredFields } from '../Utils/Utils.js';
 
 const UserRegister = async (req, res) => {
   // * Dados necessários foram enviados?
-
   const requiredFields = [
-    [
-      'name',
-      'lastName',
-      'birthDate',
-      'CPF',
-      'phone',
-      'email',
-      'password',
-      'gender',
-    ],
+    'name',
+    'lastName',
+    'birthDate',
+    'CPF',
+    'phone',
+    'email',
+    'password',
+    'gender',
   ];
   const missingFields = checkMissingRequiredFields(req.body, requiredFields);
   if (!missingFields.success) {
@@ -41,8 +38,13 @@ const UserRegister = async (req, res) => {
 
   try {
     const user = await UsersModels.register(req.body, req.userIp);
-    const token = generateToken(user);
-    const userLoginData = await UsersModels.getUserDataToLogin(user.email);
+    const token = generateToken({
+      _id: user._id,
+      role: user.personalInfo.role,
+    });
+    const userLoginData = await UsersModels.getUserDataToLogin(
+      user.personalInfo.email,
+    );
     res.status(201).json({
       user: userLoginData,
       token,
@@ -86,7 +88,10 @@ const UserLogin = async (req, res) => {
       });
     }
 
-    const token = generateToken(user);
+    const token = generateToken({
+      _id: user._id,
+      role: user.personalInfo.role,
+    });
     const userLoginData = await UsersModels.getUserDataToLogin(
       user.personalInfo.email,
     );
@@ -126,7 +131,10 @@ const UserAuth = async (req, res) => {
 
   try {
     const user = await UsersModels.getUserDataToLogin(email);
-    const token = generateToken(user);
+    const token = generateToken({
+      _id: user._id,
+      role: user.personalInfo.role,
+    });
 
     //* Atualizar ultimo Ip de login e last login date
     UsersModels.updateUserField(

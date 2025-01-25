@@ -13,8 +13,7 @@ const authenticate = async (req, res, next) => {
 
   try {
     const decoded = verifyToken(token);
-
-    const user = await userSchema.findById(decoded.id);
+    const user = await userSchema.findById(decoded._id);
     if (!user) {
       return res
         .status(401)

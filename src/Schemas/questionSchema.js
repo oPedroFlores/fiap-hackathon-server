@@ -33,16 +33,18 @@ const questionSchema = new mongoose.Schema({
     max: 3,
   },
   subject: {
-    type: String,
-    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Subject',
+    default: null,
   },
   topic: {
     type: String,
     required: true,
   },
   grade: {
-    type: String,
-    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Grades',
+    default: null,
   },
   difficulty: {
     type: String,

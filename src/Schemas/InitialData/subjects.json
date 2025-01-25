@@ -1,6 +1,7 @@
 [
   {
     "name": "Matemática",
+    "default": true,
     "topics": [
       { "name": "Álgebra" },
       { "name": "Geometria" },
@@ -13,6 +14,7 @@
   },
   {
     "name": "Física",
+    "default": true,
     "topics": [
       { "name": "Mecânica" },
       { "name": "Termodinâmica" },
@@ -25,6 +27,7 @@
   },
   {
     "name": "Química",
+    "default": true,
     "topics": [
       { "name": "Química Geral" },
       { "name": "Química Orgânica" },
@@ -37,6 +40,7 @@
   },
   {
     "name": "Biologia",
+    "default": true,
     "topics": [
       { "name": "Citologia" },
       { "name": "Genética" },
@@ -52,6 +56,7 @@
   },
   {
     "name": "História",
+    "default": true,
     "topics": [
       { "name": "História Antiga" },
       { "name": "História Medieval" },
@@ -64,6 +69,7 @@
   },
   {
     "name": "Geografia",
+    "default": true,
     "topics": [
       { "name": "Geografia Física" },
       { "name": "Geografia Humana" },
@@ -78,6 +84,7 @@
   },
   {
     "name": "Português",
+    "default": true,
     "topics": [
       { "name": "Gramática" },
       { "name": "Literatura" },
@@ -91,6 +98,7 @@
   },
   {
     "name": "Inglês",
+    "default": true,
     "topics": [
       { "name": "Gramática Inglesa" },
       { "name": "Vocabulário" },
@@ -103,6 +111,7 @@
   },
   {
     "name": "Educação Física",
+    "default": true,
     "topics": [
       { "name": "Esportes Coletivos" },
       { "name": "Condicionamento Físico" },
@@ -115,6 +124,7 @@
   },
   {
     "name": "Artes",
+    "default": true,
     "topics": [
       { "name": "História da Arte" },
       { "name": "Artes Visuais" },
@@ -127,6 +137,7 @@
   },
   {
     "name": "Filosofia",
+    "default": true,
     "topics": [
       { "name": "Ética" },
       { "name": "Lógica" },
@@ -139,6 +150,7 @@
   },
   {
     "name": "Sociologia",
+    "default": true,
     "topics": [
       { "name": "Teorias Sociológicas" },
       { "name": "Cultura e Sociedade" },
@@ -151,6 +163,7 @@
   },
   {
     "name": "Tecnologia",
+    "default": true,
     "topics": [
       { "name": "Programação Básica" },
       { "name": "Internet e Sociedade" },
@@ -161,6 +174,7 @@
   },
   {
     "name": "Língua Espanhola",
+    "default": true,
     "topics": [
       { "name": "Gramática Espanhola" },
       { "name": "Vocabulário" },

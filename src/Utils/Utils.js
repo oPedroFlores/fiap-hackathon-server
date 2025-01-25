@@ -13,7 +13,6 @@ export const checkMissingRequiredFields = (data, clientRequiredFields) => {
       data[field] === undefined || data[field] === null || data[field] === ''
     );
   });
-
   if (missingFields.length > 0) {
     return {
       success: false,

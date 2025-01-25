@@ -8,6 +8,16 @@ const subjectsSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  default: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    default: null,
+  },
   topics: [
     {
       name: {
@@ -15,12 +25,19 @@ const subjectsSchema = new mongoose.Schema({
         required: true,
         validate: {
           validator: function (topicName) {
-            const topicNames = this.topics.map((topic) => topic.name);
+            // "this" aqui é o próprio subdocumento do tópico
+            // logo precisamos acessar o documento pai:
+            const parent = this.parent(); // ou this.ownerDocument()
+
+            // Agora sim obtemos o array de tópicos completo do documento pai
+            const topicNames = parent.topics.map((topic) => topic.name);
+
             const occurrences = topicNames.filter(
               (name) => name === topicName,
             ).length;
             return occurrences === 1; // Garante que o nome aparece apenas uma vez
           },
+
           message: (props) =>
             `O tópico "${props.value}" já existe neste subject!`,
         },

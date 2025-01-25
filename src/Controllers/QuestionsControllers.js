@@ -15,9 +15,9 @@ const createQuestion = async (req, res) => {
       'alternatives',
       'correctAnswer',
       'difficulty',
-      'subject',
+      'subjectId',
       'topic',
-      'grade',
+      'gradeId',
     ];
 
     const missingFields = checkMissingRequiredFields(req.body, requiredFields);
@@ -26,7 +26,10 @@ const createQuestion = async (req, res) => {
     }
 
     //* Verificar se este subject (materia) existe
-    const subjectExists = await thisSubjectExists(req.body.subject);
+    const subjectExists = await thisSubjectExists(
+      req.body.subjectId,
+      req.user._id,
+    );
     if (!subjectExists) {
       return res
         .status(400)
@@ -34,7 +37,10 @@ const createQuestion = async (req, res) => {
     }
 
     //* Verificar se este topic (topico) existe
-    const topicExists = await thisTopicExists(req.body.subject, req.body.topic);
+    const topicExists = await thisTopicExists(
+      req.body.subjectId,
+      req.body.topic,
+    );
     if (!topicExists) {
       return res
         .status(400)
@@ -71,7 +77,7 @@ const createQuestion = async (req, res) => {
     }
 
     //* A grade enviada está correta?
-    const gradeExists = await thisGradeExists(req.body.grade);
+    const gradeExists = await thisGradeExists(req.body.gradeId, req.user._id);
     if (!gradeExists) {
       return res
         .status(400)
@@ -93,14 +99,26 @@ const createQuestion = async (req, res) => {
     });
   } catch (error) {
     console.error('Erro ao criar questão:', error);
-    return res
-      .status(500)
-      .json({
-        message: 'Erro ao criar questão.',
-        error: error.message,
-        success: false,
-      });
+    return res.status(500).json({
+      message: 'Erro ao criar questão.',
+      error: error.message,
+      success: false,
+    });
   }
 };
 
-export default { createQuestion };
+const getAllQuestions = async (req, res) => {
+  try {
+    const questions = await QuestionModels.getAllQuestions(req.user._id);
+    return res.status(200).json({ success: true, questions });
+  } catch (error) {
+    console.error('Erro ao buscar questões:', error);
+    return res.status(500).json({
+      message: 'Erro ao buscar questões.',
+      error: error.message,
+      success: false,
+    });
+  }
+};
+
+export default { createQuestion, getAllQuestions };
