@@ -5,7 +5,7 @@ import questionSchema from '../Schemas/questionSchema.js';
 const QuestionModel = mongoose.model('Question', questionSchema);
 const getQuestionsModel = new mongoose.Schema({
   statement: String,
-  author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   subject: { type: mongoose.Schema.Types.ObjectId, ref: 'Subject' },
   grade: { type: mongoose.Schema.Types.ObjectId, ref: 'Grade' },
 });
@@ -19,7 +19,7 @@ const createQuestion = async (question, user) => {
       grade: question.gradeId,
       isPublic: question.isPublic || false,
       accessibility: question.accessibility || false,
-      author: user._id,
+      createdBy: user._id,
     });
     return newQuestion;
   } catch (error) {
@@ -27,17 +27,119 @@ const createQuestion = async (question, user) => {
   }
 };
 
-const getAllQuestions = async (userId) => {
+const getAllQuestions = async (userId, page, limit) => {
   try {
-    const questions = await QuestionModel.find({ author: userId })
-      .populate('author', 'personalInfo.name personalInfo.email')
-      .populate('subject', 'name')
-      .populate('grade', 'name');
+    const skip = (page - 1) * limit;
 
-    return questions;
+    const totalQuestions = await QuestionModel.countDocuments({
+      createdBy: userId,
+    });
+
+    const questions = await QuestionModel.find({ createdBy: userId })
+      .populate('createdBy', 'personalInfo.name personalInfo.email')
+      .populate('subject', 'name')
+      .populate('grade', 'name')
+      .skip(skip)
+      .limit(limit);
+
+    const totalPages = Math.ceil(totalQuestions / limit);
+
+    return {
+      questions,
+      totalQuestions,
+      totalPages,
+    };
   } catch (error) {
     throw new Error('Erro ao buscar perguntas: ' + error.message);
   }
 };
 
-export default { createQuestion, getAllQuestions };
+const deleteQuestion = async (id) => {
+  try {
+    await QuestionModel.findByIdAndDelete(id);
+  } catch (error) {
+    throw new Error('Erro ao deletar pergunta: ' + error.message);
+  }
+};
+
+const getQuestionById = async (id) => {
+  try {
+    const question = await QuestionModel.findById(id)
+      .populate({
+        path: 'createdBy',
+        select: 'personalInfo.name personalInfo.lastName',
+      })
+      .populate('subject', 'name')
+      .populate('grade', 'name');
+
+    return question;
+  } catch (error) {
+    throw new Error('Erro ao buscar pergunta: ' + error.message);
+  }
+};
+
+const capitalize = (str) => {
+  if (typeof str !== 'string') return '';
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};
+
+const updateQuestion = async (id, question) => {
+  try {
+    await QuestionModel.findByIdAndUpdate(
+      id,
+      {
+        ...question,
+        subject: question.subjectId,
+        grade: question.gradeId,
+        difficulty: capitalize(question.difficulty),
+      },
+      { new: true },
+    );
+  } catch (error) {
+    throw new Error('Erro ao atualizar pergunta: ' + error.message);
+  }
+};
+
+const getTestQuestions = async (userId, filters, page, limit) => {
+  try {
+    const skip = (page - 1) * limit;
+
+    if (filters.subjectId) {
+      filters.subject = filters.subjectId;
+    }
+
+    const totalQuestions = await QuestionModel.countDocuments({
+      createdBy: userId,
+      ...filters,
+    });
+
+    const questions = await QuestionModel.find({
+      createdBy: userId,
+      ...filters,
+    })
+      .populate('createdBy', 'personalInfo.name personalInfo.email')
+      .populate('subject', 'name')
+      .populate('grade', 'name')
+      .skip(skip)
+      .limit(limit);
+
+    const totalPages = Math.ceil(totalQuestions / limit);
+
+    return {
+      questions,
+      totalQuestions,
+      totalPages,
+    };
+  } catch (error) {
+    throw new Error('Erro ao buscar perguntas: ' + error.message);
+  }
+};
+
+export default {
+  createQuestion,
+  getAllQuestions,
+  deleteQuestion,
+  getQuestionById,
+  updateQuestion,
+  getTestQuestions,
+};

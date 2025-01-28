@@ -7,7 +7,7 @@ const getAllSubjects = async (userId) => {
         { default: true }, // Busca pelos subjects padrão
         { createdBy: userId }, // Busca pelos subjects criados pelo usuário
       ],
-    }).select('name default _id');
+    }).select('name default _id topics');
 
     return subjects;
   } catch (error) {

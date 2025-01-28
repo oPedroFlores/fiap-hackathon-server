@@ -14,4 +14,26 @@ router.post(
   QuestionsController.createQuestion,
 );
 
+router.get(
+  '/testQuestions',
+  UserMiddleware.authenticate,
+  QuestionsController.getTestQuestions,
+);
+
+router.delete(
+  '/:id',
+  UserMiddleware.authenticate,
+  QuestionsController.deleteQuestion,
+);
+router.get(
+  '/:id',
+  UserMiddleware.authenticate,
+  QuestionsController.getQuestionById,
+);
+router.put(
+  '/:id',
+  UserMiddleware.authenticate,
+  QuestionsController.updateQuestion,
+);
+
 export default router;

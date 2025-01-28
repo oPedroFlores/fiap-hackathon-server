@@ -1,16 +1,28 @@
 import { Subject } from '../Schemas/subjectsSchema.js';
 
+import mongoose from 'mongoose';
+
 export const thisSubjectExists = async (subject, userId) => {
-  if (!subject || !userId) return false;
-  const subjectExists = await Subject.findOne({
-    _id: subject,
-  });
+  // Verificar se o ID é válido
+  if (!mongoose.Types.ObjectId.isValid(subject) || !userId) {
+    return false;
+  }
 
-  if (subjectExists.createdBy === null) return true;
+  try {
+    const subjectExists = await Subject.findOne({ _id: subject });
 
-  if (subjectExists.createdBy.equals(userId)) return true;
+    if (!subjectExists) {
+      return false; // Subject não encontrado
+    }
 
-  return false;
+    if (subjectExists.createdBy === null) {
+      return true; // Subject global (sem dono)
+    }
+
+    return subjectExists.createdBy.equals(userId);
+  } catch (error) {
+    throw new Error('Erro ao verificar subject: ' + error.message);
+  }
 };
 
 export const subjectNameAlreadyExistsForUser = async (
