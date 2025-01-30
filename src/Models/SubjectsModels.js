@@ -1,15 +1,26 @@
 import { Subject } from '../Schemas/subjectsSchema.js';
 
-const getAllSubjects = async (userId) => {
+const getAllSubjects = async (userId, page, limit) => {
   try {
+    const skip = (page - 1) * limit;
+
+    const totalQuestions = await Subject.countDocuments({
+      createdBy: userId,
+    });
+
     const subjects = await Subject.find({
       $or: [
         { default: true }, // Busca pelos subjects padrão
         { createdBy: userId }, // Busca pelos subjects criados pelo usuário
       ],
-    }).select('name default _id topics');
+    })
+      .select('name default _id topics')
+      .skip(skip)
+      .limit(limit);
 
-    return subjects;
+    const totalPages = Math.ceil(totalQuestions / limit);
+
+    return { subjects, totalQuestions, totalPages };
   } catch (error) {
     throw new Error('Erro ao pegar materias: ' + error.message);
   }

@@ -8,8 +8,19 @@ import {
 } from '../Utils/SubjectUtils.js';
 const getAllSubjects = async (req, res) => {
   try {
-    const subjects = await SubjectsModels.getAllSubjects(req.user._id);
-    res.status(200).json({ success: true, subjects });
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = 10;
+    const subjectsResponse = await SubjectsModels.getAllSubjects(
+      req.user._id,
+      page,
+      limit,
+    );
+
+    const { subjects, totalQuestions, totalPages } = subjectsResponse;
+
+    res
+      .status(200)
+      .json({ success: true, page, totalPages, totalQuestions, subjects });
   } catch (error) {
     console.log(`Erro ao buscar materias: ${error.message}`);
     res.status(400).json({ success: false, error: error.message });
