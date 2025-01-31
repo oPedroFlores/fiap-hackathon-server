@@ -37,7 +37,7 @@ const createQuestion = async (req, res) => {
     if (!subjectExists) {
       return res
         .status(400)
-        .json({ message: 'A matéria informada nao existe.', success: false });
+        .json({ message: 'A matéria informada não existe.', success: false });
     }
 
     //* Verificar se este topic (topico) existe
@@ -48,7 +48,7 @@ const createQuestion = async (req, res) => {
     if (!topicExists) {
       return res
         .status(400)
-        .json({ message: 'O topico informado nao existe.', success: false });
+        .json({ message: 'O topico informado não existe.', success: false });
     }
 
     //* Tem *exatamente* 4 alternativas?
@@ -64,7 +64,7 @@ const createQuestion = async (req, res) => {
     const isValidDifficultyLevel = isValidDifficulty(req.body.difficulty);
     if (!isValidDifficultyLevel) {
       return res.status(400).json({
-        message: 'A dificuldade informada nao é valida.',
+        message: 'A dificuldade informada não é valida.',
         success: false,
       });
     }
@@ -85,7 +85,7 @@ const createQuestion = async (req, res) => {
     if (!gradeExists) {
       return res
         .status(400)
-        .json({ message: 'A grade informada nao existe.', success: false });
+        .json({ message: 'A grade informada não existe.', success: false });
     }
 
     //* Criando a questão
@@ -145,7 +145,7 @@ const deleteQuestion = async (req, res) => {
   if (!id) {
     return res
       .status(400)
-      .json({ message: 'Id da questão nao foi informado.', success: false });
+      .json({ message: 'Id da questão não foi informado.', success: false });
   }
   try {
     //* Essa questão é deste usuário?
@@ -180,7 +180,7 @@ const getQuestionById = async (req, res) => {
   if (!id) {
     return res
       .status(400)
-      .json({ message: 'Id da questão nao foi informado.', success: false });
+      .json({ message: 'Id da questão não foi informado.', success: false });
   }
   try {
     //* Essa questão é deste usuário ou é pública ?
@@ -213,7 +213,7 @@ const updateQuestion = async (req, res) => {
   if (!id) {
     return res
       .status(400)
-      .json({ message: 'Id da questão nao foi informado.', success: false });
+      .json({ message: 'Id da questão não foi informado.', success: false });
   }
   try {
     //* Verificar se essa questão existe e pertence ao usuário
@@ -273,14 +273,14 @@ const updateQuestion = async (req, res) => {
       if (!subjectExists) {
         return res
           .status(400)
-          .json({ message: 'A matéria informada nao existe.', success: false });
+          .json({ message: 'A matéria informada não existe.', success: false });
       }
     }
 
     //* Ao trocar o subject, deve ser enviado o novo topic
     if (req.body.subjectId && !req.body.topic) {
       return res.status(400).json({
-        message: 'O topico nao foi informado ao alterar a materia.',
+        message: 'O topico não foi informado ao alterar a materia.',
         success: false,
       });
     }
@@ -294,7 +294,7 @@ const updateQuestion = async (req, res) => {
       if (!topicExists) {
         return res
           .status(400)
-          .json({ message: 'O topico informado nao existe.', success: false });
+          .json({ message: 'O topico informado não existe.', success: false });
       }
     }
 
@@ -304,7 +304,7 @@ const updateQuestion = async (req, res) => {
       if (!gradeExists) {
         return res
           .status(400)
-          .json({ message: 'A grade informada nao existe.', success: false });
+          .json({ message: 'A grade informada não existe.', success: false });
       }
     }
 
