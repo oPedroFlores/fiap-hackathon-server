@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
-import testSchema from '../Schemas/testSchema';
-const testModel = mongoose.model('Test', testSchema);
+import Test from '../Schemas/testSchema.js';
 
 export const thisTestIdBelongsToThisUser = async (testId, userId) => {
   const testExists = await questionModel.findOne({ _id: testId });
@@ -11,4 +10,3 @@ export const thisTestIdBelongsToThisUser = async (testId, userId) => {
 
   return { error: 'Prova não pertence ao usuário' };
 };
-

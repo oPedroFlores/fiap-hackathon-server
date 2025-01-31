@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import questionSchema from '../Schemas/questionSchema.js';
-const questionModel = mongoose.model('Question', questionSchema);
 
 export const thisQuestionIdBelongsToThisUser = async (questionId, userId) => {
   const questionExists = await questionModel.findOne({ _id: questionId });

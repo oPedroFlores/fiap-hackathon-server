@@ -50,7 +50,7 @@ const testSchema = new mongoose.Schema({
     required: true,
     min: 1,
   },
-	createdBy: {
+  createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
@@ -71,6 +71,6 @@ const testSchema = new mongoose.Schema({
   },
 });
 
-const Test = mongoose.model('Test', testSchema);
+const TestModel = mongoose.model('Test', testSchema);
 
-export default Test;
+export default TestModel;

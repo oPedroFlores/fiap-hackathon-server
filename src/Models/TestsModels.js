@@ -1,17 +1,16 @@
-import mongoose from 'mongoose';
-
-const Test = mongoose.model('Test', testSchema);
+import testSchema from '../Schemas/testSchema.js';
 
 const createTest = async (testData, user) => {
+  console.log('User: ', user);
   try {
-
-    const newTest = await Test.create({
+    const newTest = await testSchema.create({
       ...testData,
       subject: testData.subjectId,
       topic: testData.topic,
       grade: testData.gradeId,
       accessibility: testData.accessibility || false,
-      createdBy: user._id,
+      createdBy: user,
+      status: 'Aguardando',
     });
     return newTest;
   } catch (error) {
@@ -20,25 +19,26 @@ const createTest = async (testData, user) => {
 };
 
 const updateTest = async (id, test) => {
-    try {
-      await Test.findByIdAndUpdate(
-        id,
-        {
-          ...test,
-          subject: test.subjectId,
-          grade: test.gradeId,
-          difficulty: capitalize(test.difficulty),
-        },
-        { new: true },
-      );
-    } catch (error) {
-      throw new Error('Erro ao atualizar prova: ' + error.message);
-    }
-  };
+  try {
+    await testSchema.findByIdAndUpdate(
+      id,
+      {
+        ...test,
+        subject: test.subjectId,
+        grade: test.gradeId,
+        difficulty: capitalize(test.difficulty),
+      },
+      { new: true },
+    );
+  } catch (error) {
+    throw new Error('Erro ao atualizar prova: ' + error.message);
+  }
+};
 
 const getTestById = async (id) => {
   try {
-    const test = await Test.findById(id)
+    const test = await testSchema
+      .findById(id)
       .populate('questions')
       .populate('subject', 'name')
       .populate('grade', 'name');
@@ -55,21 +55,22 @@ const getAllTests = async (userId, page, limit) => {
   try {
     const skip = (page - 1) * limit;
 
-    const totalTests = await Test.countDocuments({
+    const totalTests = await testSchema.countDocuments({
       createdBy: userId,
     });
 
-    const tests = await Test.find({ createdBy: userId })
+    const tests = await testSchema
+      .find({ createdBy: userId })
       .populate('questions')
       .populate('createdBy', 'personalInfo.name personalInfo.email')
       .populate('subject', 'name')
       .populate('grade', 'name')
       .skip(skip)
       .limit(limit);
-    
+
     const totalPages = Math.ceil(totalTests / limit);
 
-     return {
+    return {
       tests,
       totalTests,
       totalPages,
@@ -80,12 +81,12 @@ const getAllTests = async (userId, page, limit) => {
 };
 
 const deleteTest = async (id) => {
-    try {
-      await Test.findByIdAndDelete(id);
-    } catch (error) {
-      throw new Error('Erro ao deletar prova: ' + error.message);
-    }
-  };
+  try {
+    await testSchema.findByIdAndDelete(id);
+  } catch (error) {
+    throw new Error('Erro ao deletar prova: ' + error.message);
+  }
+};
 
 export default {
   updateTest,

@@ -4,6 +4,7 @@ import UserRouters from './Routers/UserRouters.js';
 import QuestionRouters from './Routers/QuestionRouters.js';
 import SubjectRouters from './Routers/SubjectRouters.js';
 import GradesRouters from './Routers/GradesRouters.js';
+import TestsRouters from './Routers/TestsRouters.js';
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -14,5 +15,6 @@ app.use('/users', UserRouters);
 app.use('/questions', QuestionRouters);
 app.use('/subjects', SubjectRouters);
 app.use('/grades', GradesRouters);
+app.use('/tests', TestsRouters);
 
 export default app;
