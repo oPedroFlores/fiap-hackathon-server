@@ -10,15 +10,10 @@ const testSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  professor: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
   subject: {
-    // "disciplina"
-    type: String,
-    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Subject',
+    default: null,
   },
   testType: {
     type: String,
@@ -36,9 +31,9 @@ const testSchema = new mongoose.Schema({
     enum: ['Aguardando', 'Em andamento', 'Finalizada', 'Cancelada'],
   },
   grade: {
-    // "turma"
-    type: String,
-    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Grades',
+    default: null,
   },
   topic: {
     // "assunto"
@@ -54,6 +49,11 @@ const testSchema = new mongoose.Schema({
     type: Number,
     required: true,
     min: 1,
+  },
+	createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
   },
   questions: [questionSchema],
   createdAt: {

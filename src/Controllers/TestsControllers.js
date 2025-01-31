@@ -1,15 +1,70 @@
+import { checkMissingRequiredFields } from '../Utils/Utils.js';
+import {
+  thisSubjectExists,
+  thisTopicExists,
+  isValidDifficulty,
+} from '../Utils/SubjectUtils.js';
+import { thisGradeExists } from '../Utils/GradeUtils.js';
 import TestsModels from '../Models/TestsModels.js';
-import UsersModels from '../Models/UsersModels.js';
-
+import {
+	thisTestIdBelongsToThisUser
+} from '../Utils/TestUtils.js';
 const testController = {
   createTest: async (req, res) => {
     try {
-      const { ...testData } = req.body;
+			const requiredFields = [
+				'testCode',
+				'testName',
+				'testType',
+				'maxScore',
+				'status',
+				'topic',
+				'difficultyLevel',
+				'numberOfQuestions',
+				'createdBy',
+				'accessibility',
+			];
+	
+			const missingFields = checkMissingRequiredFields(req.body, requiredFields);
+			if (!missingFields.success) {
+				return res.status(400).json(missingFields);
+			}
+			
+			const subjectExists = await thisSubjectExists(
+				req.body.subjectId,
+				req.user._id,
+			);
+			if (!subjectExists) {
+				return res
+					.status(400)
+					.json({ message: 'A matéria informada não existe.', success: false });
+			}
 
-      const professor = await UsersModels.findById(testData.professor);
-      if (!professor) {
-        return res.status(400).json({ message: 'Professor não encontrado.' });
-      }
+			const topicExists = await thisTopicExists(
+				req.body.subjectId,
+				req.body.topic,
+			);
+
+			if (!topicExists) {
+				return res
+					.status(400)
+					.json({ message: 'O topico informado não existe.', success: false });
+			}
+
+			const isValidDifficultyLevel = isValidDifficulty(req.body.difficulty);
+				if (!isValidDifficultyLevel) {
+					return res.status(400).json({
+						message: 'A dificuldade informada não é valida.',
+						success: false,
+					});
+			}
+
+			const gradeExists = await thisGradeExists(req.body.gradeId, req.user._id);
+			if (!gradeExists) {
+				return res
+					.status(400)
+					.json({ message: 'A grade informada não existe.', success: false });
+			}
 
       const newTest = await TestsModels.create(testData);
 
@@ -21,64 +76,183 @@ const testController = {
   },
 
   getTestById: async (req, res) => {
+		const id = req.params.id;
+		if (!id) {
+			return res
+				.status(400)
+				.json({ message: 'Id da prova não foi informado.', success: false });
+		}
+
     try {
-      const test = await TestsModels.findById(req.params.id)
-        .populate('questions')
-        .populate('professor');
-      if (!test) {
-        return res.status(404).json({ message: 'Prova não encontrada.' });
-      }
-      res.json(test);
+			const belongsToUser = await thisTestIdBelongsToThisUser(
+				id,
+				req.user._id,
+			);
+
+			if (belongsToUser.error) {
+				return res.status(400).json({
+					message: belongsToUser.error,
+					success: false,
+				});
+			}
+
+      const test = await TestsModels.getTestById(id);
+      return res.status(200).json({ success: true, test });
     } catch (error) {
       console.error("Erro ao buscar prova:", error);
-      res.status(500).json({ message: 'Erro ao buscar prova.', error: error.message });
+      return res.status(500).json({ message: 'Erro ao buscar prova.', error: error.message, success: false });
     }
   },
 
-  getAllActiveTests: async (req, res) => {
-    try {
-      const tests = await TestsModels.find({ status: 'active' }).populate('professor');
-      res.json(tests);
-    } catch (error) {
-      console.error("Erro ao buscar provas ativas:", error);
-      res.status(500).json({ message: 'Erro ao buscar provas ativas.', error: error.message });
-    }
-  },
+  getAllTests: async (req, res) => {
+		const page = parseInt(req.query.page, 10) || 1;
+		const limit = 10;
 
-  getTestsByProfessor: async (req, res) => {
     try {
-      const tests = await TestsModels.find({ professor: req.params.professorId }).populate('professor');
-      res.json(tests);
+      const result = await TestsModels.getAllTests(req.user._id,
+				page,
+				limit,
+			);
+
+			const {  tests, totalTests, totalPages } = result;
+			res.status(200).json({
+				success: true,
+				page,
+				totalPages,
+				totalTests,
+				tests,
+			});
     } catch (error) {
-      console.error("Erro ao buscar provas por professor:", error);
-      res.status(500).json({ message: 'Erro ao buscar provas por professor.', error: error.message });
+      console.error("Erro ao buscar provas:", error);
+      res.status(500).json({ message: 'Erro ao buscar provas.', error: error.message, success: false });
     }
   },
 
   updateTest: async (req, res) => {
+		const id = req.params.id;
+		if (!id) {
+			return res
+				.status(400)
+				.json({ message: 'Id da prova não foi informado.', success: false });
+		}
     try {
-      const updatedTest = await TestsModels.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-      if (!updatedTest) {
-        return res.status(404).json({ message: 'Prova não encontrada.' });
-      }
-      res.json(updatedTest);
+			const belongsToUser = await thisTestIdBelongsToThisUser(
+				id,
+				req.user._id,
+			);
+
+			if (belongsToUser.error) {
+				return res.status(400).json({
+					message: belongsToUser.error,
+					success: false,
+				});
+			}
+
+			const difficulties = ['Easy', 'Medium', 'Hard'];
+			const difficultiesLowerCase = difficulties.map((difficulty) =>
+				difficulty.toLowerCase(),
+			);
+
+			if (
+				req.body.difficulty &&
+				!difficultiesLowerCase.includes(req.body.difficulty.toLowerCase())
+			) {
+				return res.status(400).json({
+					message: 'Dificuldade deve estar entre easy, medium e hard.',
+					success: false,
+				});
+			}
+
+			if (req.body.subjectId) {
+				const subjectExists = await thisSubjectExists(
+					req.body.subjectId,
+					req.user._id,
+				);
+				if (!subjectExists) {
+					return res
+						.status(400)
+						.json({ message: 'A matéria informada não existe.', success: false });
+				}
+			}
+
+			if (req.body.subjectId && !req.body.topic) {
+				return res.status(400).json({
+					message: 'O topico não foi informado ao alterar a materia.',
+					success: false,
+				});
+			}
+
+			if (req.body.topic) {
+				const topicExists = await thisTopicExists(
+					req.body.subjectId,
+					req.body.topic,
+				);
+				if (!topicExists) {
+					return res
+						.status(400)
+						.json({ message: 'O topico informado não existe.', success: false });
+				}
+			}
+
+			if (req.body.gradeId) {
+				const gradeExists = await thisGradeExists(req.body.gradeId, req.user._id);
+				if (!gradeExists) {
+					return res
+						.status(400)
+						.json({ message: 'A grade informada não existe.', success: false });
+				}
+			}
+
+      await TestsModels.updateTest(id, req.body);
+
+      return res.status(200).json({
+				message: 'Prova atualizada com sucesso.',
+				success: true,
+			});
     } catch (error) {
-      console.error("Erro ao atualizar prova:", error);
-      res.status(500).json({ message: 'Erro ao atualizar prova.', error: error.message });
+      console.error('Erro ao atualizar prova:', error);
+
+			return res.status(500).json({
+				message: 'Erro ao atualizar prova.',
+				error: error.message,
+				success: false,
+			});
     }
   },
 
-  // Deletar uma prova
   deleteTest: async (req, res) => {
+		const id = req.params.id;
+		if (!id) {
+			return res
+				.status(400)
+				.json({ message: 'Id da prova não foi informado.', success: false });
+		}
+
     try {
-      const deletedTest = await TestsModels.findByIdAndDelete(req.params.id);
-      if (!deletedTest) {
-        return res.status(404).json({ message: 'Prova não encontrada.' });
-      }
-      res.status(204).send();
+			const belongsToUser = await thisTestIdBelongsToThisUser(
+				id,
+				req.user._id,
+			);
+
+			if (belongsToUser.error) {
+				return res.status(400).json({
+					message: belongsToUser.error,
+					success: false,
+				});
+			}
+
+      await TestsModels.deleteTest(id);
+      return res.status(200).json({
+				message: 'Prova deletada com sucesso.',
+				success: true,
+			});
     } catch (error) {
       console.error("Erro ao deletar prova:", error);
-      res.status(500).json({ message: 'Erro ao deletar prova.', error: error.message });
+			return res.status(500).json({
+				message: 'Erro ao deletar prova.',
+				error: error.message,
+				success: false,
+			});
     }
   },
 };
