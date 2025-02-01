@@ -113,7 +113,7 @@ const createQuestion = async (req, res) => {
 
 const getAllQuestions = async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1;
-  const limit = 10;
+  const limit = Math.min(Math.max(parseInt(req.query.limit, 10) || 10, 1), 100);
   try {
     const result = await QuestionModels.getAllQuestions(
       req.user._id,
@@ -126,6 +126,7 @@ const getAllQuestions = async (req, res) => {
     return res.status(200).json({
       success: true,
       page,
+      limit,
       totalPages,
       totalQuestions,
       questions,

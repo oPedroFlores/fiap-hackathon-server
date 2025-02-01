@@ -129,7 +129,10 @@ const testController = {
 
   getAllTests: async (req, res) => {
     const page = parseInt(req.query.page, 10) || 1;
-    const limit = 10;
+    const limit = Math.min(
+      Math.max(parseInt(req.query.limit, 10) || 10, 1),
+      100,
+    );
 
     try {
       const result = await TestsModels.getAllTests(req.user._id, page, limit);
@@ -138,6 +141,7 @@ const testController = {
       res.status(200).json({
         success: true,
         page,
+        limit,
         totalPages,
         totalTests,
         tests,
