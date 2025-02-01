@@ -54,7 +54,7 @@ const getUserDataToLogin = async (email) => {
     const user = await userSchema
       .findOne({ 'personalInfo.email': email })
       .select(
-        '-personalInfo.password -__v -connectionInfo.createdAt -connectionInfo.updatedAt -connectionInfo.deletedAt -personalInfo.status -personalInfo.CPF -personalInfo.birthDate -connectionInfo.createdAtIP -connectionInfo.updatedAtIP -connectionInfo.deletedAtIP -connectionInfo.lastLoginIP -connectionInfo.lastLoginDate',
+        '-personalInfo.password -__v -connectionInfo.createdAt -connectionInfo.updatedAt -connectionInfo.deletedAt -personalInfo.status -personalInfo.birthDate -connectionInfo.createdAtIP -connectionInfo.updatedAtIP -connectionInfo.deletedAtIP -connectionInfo.lastLoginIP -connectionInfo.lastLoginDate',
       );
     if (!user) {
       throw new Error('Usuário não encontrado.');
