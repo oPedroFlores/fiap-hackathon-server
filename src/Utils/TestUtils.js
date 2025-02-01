@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import Test from '../Schemas/testSchema.js';
 
 export const thisTestIdBelongsToThisUser = async (testId, userId) => {
-  const testExists = await questionModel.findOne({ _id: testId });
+  const testExists = await Test.findOne({ _id: testId });
 
   if (!testExists) return { error: 'Prova não encontrada' };
 

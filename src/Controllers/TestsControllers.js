@@ -29,6 +29,20 @@ const testController = {
         return res.status(400).json(missingFields);
       }
 
+      //* Verificar se foi enviado questões, adicionar o createdBy
+      if (!req.body.questions) {
+        return res
+          .status(400)
+          .json({ message: 'Nenhuma questão foi enviada.', success: false });
+      }
+
+      const questions = req.body.questions.map((question) => ({
+        ...question,
+        createdBy: req.user._id,
+      }));
+
+      req.body.questions = questions;
+
       const subjectExists = await thisSubjectExists(
         req.body.subjectId,
         req.user._id,

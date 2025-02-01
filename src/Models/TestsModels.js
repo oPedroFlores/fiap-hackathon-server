@@ -18,6 +18,11 @@ const createTest = async (testData, user) => {
   }
 };
 
+const capitalize = (str) => {
+  if (typeof str !== 'string') return '';
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};
+
 const updateTest = async (id, test) => {
   try {
     await testSchema.findByIdAndUpdate(
