@@ -32,11 +32,11 @@ const getAllQuestions = async (userId, page, limit) => {
     const skip = (page - 1) * limit;
 
     const totalQuestions = await QuestionModel.countDocuments({
-      $or: [{ createdBy: userId }, { isPublic: true }],
+      $or: [{ createdBy: userId }, { isPublic: false }],
     });
 
     const questions = await QuestionModel.find({
-      $or: [{ createdBy: userId }, { isPublic: true }],
+      $or: [{ createdBy: userId }, { isPublic: false }],
     })
       .populate('createdBy', 'personalInfo.name personalInfo.email')
       .populate('subject', 'name')
