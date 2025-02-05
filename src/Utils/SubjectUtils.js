@@ -72,7 +72,7 @@ export const thisTopicExists = async (subjectId, topic) => {
   try {
     const subjectExists = await Subject.findOne({ _id: subjectId });
     if (subjectExists) {
-      const topicExists = subjectExists.topics.find((t) => t.name === topic);
+      const topicExists = subjectExists.topics.find((t) => t._id.equals(topic));
       return !!topicExists;
     }
     return false;
