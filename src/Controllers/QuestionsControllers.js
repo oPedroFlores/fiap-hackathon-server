@@ -160,7 +160,6 @@ const deleteQuestion = async (req, res) => {
         success: false,
       });
     }
-
     await QuestionModels.deleteQuestion(id);
     return res.status(200).json({
       message: 'Questão deletada com sucesso.',
